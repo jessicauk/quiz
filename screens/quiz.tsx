@@ -76,12 +76,17 @@ export default function Dashboard() {
   useEffect(() => {
     if (selected !== null) {
       const answersArray = [...answers];
-      answersArray.push({ question: index + 1, answer: true });
-      setAnswers(answersArray);
+      
       if (selected === current?.correct_answer) {
         setPoints((points) => points + 1);
+        answersArray.push({ question: index + 1, answer: true });
         setAnswerStatus(true);
-      } else setAnswerStatus(false);
+      } else {
+        answersArray.push({ question: index + 1, answer: false });
+        setAnswerStatus(false);
+      }
+      setAnswers(answersArray);
+
     }
   }, [selected]);
 
