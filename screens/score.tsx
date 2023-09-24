@@ -26,7 +26,7 @@ export default function Score() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#efb0ff",
     paddingHorizontal: 10,
   },
 
