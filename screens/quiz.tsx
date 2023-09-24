@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
+  Pressable,
 } from "react-native";
 import { Text } from "@rneui/themed";
 import { useQuery } from "@tanstack/react-query";
@@ -14,7 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 import { getQuiz } from "../api/api";
 import { useQuestionStore } from "../stores/question";
 import { shuffled, quotes } from "../utils";
-import { Answer } from "../stores/interfaces";
+import { Answer, Data } from "../stores/interfaces";
 import { QuizScreenNavigationProp } from "../types/stack-navigator";
 
 export default function Dashboard() {
@@ -33,8 +34,10 @@ export default function Dashboard() {
 
   const navigation = useNavigation<QuizScreenNavigationProp>();
 
-  const handleQuestion = (index: number) => {
-    setCurrent(data.results[index]);
+  const progressPercentage = Math.floor((index / totalQuestions) * 100);
+
+  const handleQuestion = (index: number = 0, data: Data) => {
+    setCurrent(data?.results[index]);
     const opt = [
       data?.results[index].correct_answer,
       ...data?.results[index].incorrect_answers,
@@ -47,13 +50,8 @@ export default function Dashboard() {
     queryKey: ["quiz"],
     queryFn: getQuiz,
     onSuccess(data) {
-      setCurrent(data.results[0]);
-      const opt = [
-        data.results[0].correct_answer,
-        ...data.results[0].incorrect_answers,
-      ];
-      setOptions(shuffled(opt));
-      setTotalQuestions(data.results.length);
+      handleQuestion(index, data);
+      setTotalQuestions(data?.results?.length);
     },
     refetchOnWindowFocus: false,
     enabled: true,
@@ -66,43 +64,46 @@ export default function Dashboard() {
 
   const onClickNext = () => {
     setIndex((index) => index + 1);
+    if (index + 1 <= totalQuestions) handleQuestion(index, data);
+  };
+
+  const clear = () => {
+    setAnswerStatus(null);
+    setSelectedAnswerIndex(null);
+    setSelected(null);
   };
 
   useEffect(() => {
     if (selected !== null) {
+      const answersArray = [...answers];
+      answersArray.push({ question: index + 1, answer: true });
+      setAnswers(answersArray);
       if (selected === current?.correct_answer) {
         setPoints((points) => points + 1);
         setAnswerStatus(true);
-        const answersArray = [...answers]
-        answersArray.push({ question: index + 1, answer: true });
-        setAnswers(answersArray)
-      } else {
-        const answersArray = [...answers]
-        answersArray.push({ question: index + 1, answer: true });
-        setAnswers(answersArray)
-      }
+      } else setAnswerStatus(false);
     }
   }, [selected]);
 
   useEffect(() => {
-    if (index + 1 > totalQuestions) {
+    if (index + 1 > totalQuestions && selected) {
       navigation.navigate("Score", {
         answers: answers,
         points: points,
       });
-    } else handleQuestion(index);
+    }
+  }, [index, totalQuestions, selected]);
+
+  useEffect(() => {
+    clear();
   }, [index]);
 
   useEffect(() => {
-    setSelected(null);
-    setAnswerStatus(null);
+    setIndex(0);
     return () => {
-      setSelected(null);
-      setAnswerStatus(null);
+      setIndex(0);
     };
-  }, [index]);
-
-  console.log(answerStatus);
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -120,13 +121,42 @@ export default function Dashboard() {
                 <Text>Your Progress</Text>
                 <Text>{`${index} / ${totalQuestions} questions answered`}</Text>
               </View>
+              {/* Progress Bar */}
+              <View
+                style={{
+                  backgroundColor: "#fff",
+                  width: "100%",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  height: 10,
+                  borderRadius: 20,
+                  justifyContent: "center",
+                  marginTop: 20,
+                  marginLeft: 10,
+                }}
+              >
+                <Text
+                  style={{
+                    backgroundColor: "#a269d1",
+                    borderRadius: 12,
+                    position: "absolute",
+                    left: 0,
+                    height: 10,
+                    right: 0,
+                    width: `${progressPercentage}%`,
+                    marginTop: 20,
+                  }}
+                />
+              </View>
+
               <View style={styles.questionContainer}>
                 <Text style={styles.question}>{quotes(current?.question)}</Text>
-                <View>
+                <View style={{ backgroundColor: "#efb0ff" }}>
                   {options?.map((item, indx) => (
-                    <TouchableOpacity
+                    <Pressable
                       key={item}
                       onPress={() => selected === null && onPress(item, indx)}
+                      style={{ backgroundColor: "#efb0ff" }}
                     >
                       <ListItem style={styles.item}>
                         <ListItem.Content
@@ -146,20 +176,20 @@ export default function Dashboard() {
                           <ListItem.Title>{quotes(item)}</ListItem.Title>
                         </ListItem.Content>
                       </ListItem>
-                    </TouchableOpacity>
+                    </Pressable>
                   ))}
                 </View>
               </View>
-              {answerStatus !== null ? (
+              {answerStatus !== null && (
                 <View style={styles.next}>
-                  <Text>
+                  <Text style={styles.label}>
                     {answerStatus ? "Answer Correct" : "Answer Wrong"}
                   </Text>
-                  <TouchableOpacity onPress={onClickNext}>
-                    <Text>Next</Text>
+                  <TouchableOpacity onPress={onClickNext} style={styles.button}>
+                    <Text>{index + 1 < totalQuestions ? "Next" : "Done"}</Text>
                   </TouchableOpacity>
                 </View>
-              ) : null}
+              )}
             </View>
           )}
         </View>
@@ -171,7 +201,7 @@ export default function Dashboard() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#efb0ff",
     paddingHorizontal: 10,
   },
   progress: {
@@ -190,13 +220,18 @@ const styles = StyleSheet.create({
     fontSize: 25,
     marginBottom: 20,
   },
-  item: { borderRadius: 20, height: "auto" },
+  item: {
+    borderRadius: 20,
+    height: "auto",
+    backgroundColor: "#efb0ff!important",
+  },
   option: {
     marginVertical: 12,
     borderWidth: 1,
-    borderColor: "#bc81e0",
+    borderColor: "#efb0ff",
     borderRadius: 20,
-    height: "auto",
+    // height: "auto",
+    backgroundColor: "#efb0ff!important",
   },
   itemContent: {
     flex: 1,
@@ -246,5 +281,19 @@ const styles = StyleSheet.create({
     alignContent: "center",
     flexDirection: "column",
     marginVertical: 30,
+  },
+  label: {
+    fontWeight: "400",
+    fontSize: 25,
+    marginBottom: 20,
+  },
+  button: {
+    backgroundColor: "#8851c1",
+    borderColor: "transparent",
+    borderWidth: 0,
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 50,
+    textAlign: "center",
   },
 });

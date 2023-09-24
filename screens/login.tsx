@@ -48,7 +48,7 @@ export default function Login() {
             }}
             titleStyle={{ fontWeight: "700" }}
             buttonStyle={{
-              backgroundColor: "rgba(92, 99,216, 1)",
+              backgroundColor: "#8851c1",
               borderColor: "transparent",
               borderWidth: 0,
               borderRadius: 5,
@@ -73,7 +73,7 @@ export default function Login() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#efb0ff",
     alignItems: "center",
     alignContent: "center",
     justifyContent: "center",
