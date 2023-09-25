@@ -7,9 +7,9 @@ import {
   Pressable,
   Text,
 } from "react-native";
-import { Image } from "@rneui/themed";
 import { useNavigation } from "@react-navigation/native";
 import { DashboardScreenNavigationProp } from "../types/stack-navigator";
+import Logout from "../components/logout";
 
 export default function Dashboard() {
   const navigation = useNavigation<DashboardScreenNavigationProp>();
@@ -18,7 +18,6 @@ export default function Dashboard() {
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View style={styles.container}>
-          <Image style={styles.image} source={require("../assets/quiz.png")} />
           <View style={styles.buttonContainer}>
             <Pressable
               style={styles.button}
@@ -29,6 +28,7 @@ export default function Dashboard() {
           </View>
         </View>
       </ScrollView>
+      <Logout />
     </SafeAreaView>
   );
 }
@@ -36,7 +36,7 @@ export default function Dashboard() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#efb0ff",
+    // backgroundColor: "#efb0ff",
     alignItems: "center",
     justifyContent: "center",
   },
