@@ -90,6 +90,11 @@ Welcome to the "Quiz" built with Expo! This README will guide you through settin
     Password: 12345678
   ```
 
+- Press on **START QUIZ** button
+
+![Login](https://github.com/jessicauk/quiz/blob/main/assets/dashboard.png?raw=true)
+
+
 ### Contributing:
 
 If you would like to contribute to this project, please make sure to branch off of master, make your changes, and then submit a pull request.
