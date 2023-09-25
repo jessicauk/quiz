@@ -6,29 +6,46 @@ import {
   ScrollView,
   Pressable,
   Text,
+  Image,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { LinearGradient } from "expo-linear-gradient";
 import { DashboardScreenNavigationProp } from "../types/stack-navigator";
 import Logout from "../components/logout";
+import { Colors } from "../const";
 
 export default function Dashboard() {
   const navigation = useNavigation<DashboardScreenNavigationProp>();
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <View style={styles.container}>
-          <View style={styles.buttonContainer}>
-            <Pressable
-              style={styles.button}
-              onPress={() => navigation.navigate("Quiz")}
-            >
-              <Text style={styles.text}>START QUIZ</Text>
-            </Pressable>
+      <LinearGradient style={styles.gradient} colors={Colors}>
+        <ScrollView>
+          <View>
+            <Text style={styles.title}>Welcome to Quizz App!</Text>
           </View>
-        </View>
-      </ScrollView>
-      <Logout />
+          <View
+            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+          >
+            <Image
+              style={styles.image}
+              alt="user-mobile"
+              source={require("../assets/user-mobile-2.png")}
+            />
+          </View>
+          <View style={styles.container}>
+            <View style={styles.buttonContainer}>
+              <Pressable
+                style={styles.button}
+                onPress={() => navigation.navigate("Quiz")}
+              >
+                <Text style={styles.text}>START QUIZ</Text>
+              </Pressable>
+            </View>
+          </View>
+        </ScrollView>
+        <Logout />
+      </LinearGradient>
     </SafeAreaView>
   );
 }
@@ -36,19 +53,33 @@ export default function Dashboard() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: "#efb0ff",
-    alignItems: "center",
     justifyContent: "center",
+    height: "100%",
+  },
+  gradient: {
+    height: "100%",
+    flex: 1,
+    justifyContent: "center",
+    alignContent: "center",
+  },
+  title: {
+    fontSize: 30,
+    fontWeight: "700",
+    textAlign: "center",
+    color: "#FFF",
+    marginVertical: 100,
   },
   image: {
-    width: 400,
-    height: 400,
     resizeMode: "contain",
+    width: 300,
+    height: 300,
+    margin: "auto",
     marginBottom: 40,
   },
   text: {
     color: "#FFF",
     fontWeight: "600",
+    textAlign: "center",
   },
   buttonContainer: {
     paddingHorizontal: 10,
@@ -61,5 +92,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 50,
     textAlign: "center",
+    fontSize: 15,
+    fontWeight: "700",
   },
 });

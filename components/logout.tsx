@@ -22,6 +22,14 @@ export const Logout: React.FunctionComponent<{}> = () => {
     >
       <Button
         title="Log out"
+        icon={
+            <Icon
+              name="logout"
+              color="white"
+              size={25}
+              iconStyle={{ marginRight: 10 }}
+            />
+          }
         onPress={toggleOverlay}
         buttonStyle={styles.button}
       />
@@ -30,8 +38,7 @@ export const Logout: React.FunctionComponent<{}> = () => {
         <Button
           icon={
             <Icon
-              name="wrench"
-              type="font-awesome"
+              name="logout"
               color="white"
               size={25}
               iconStyle={{ marginRight: 10 }}
@@ -48,9 +55,9 @@ export const Logout: React.FunctionComponent<{}> = () => {
 const styles = StyleSheet.create({
   button: {
     borderRadius: 50,
-    width: 80,
-    height: 80,
-    marginBottom: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    padding: 10,
     backgroundColor: "#8851c1",
     margin: 10,
   },

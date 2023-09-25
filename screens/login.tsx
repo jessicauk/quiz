@@ -14,6 +14,7 @@ import { Input, Icon } from "@rneui/themed";
 import { LoginScreenNavigationProp } from "../types/stack-navigator";
 import { useLoginStore } from "../stores/login";
 import { LinearGradient } from "expo-linear-gradient";
+import { Colors } from "../const";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -35,7 +36,7 @@ export default function Login() {
     <SafeAreaView style={styles.container}>
       <LinearGradient
         style={styles.gradient}
-        colors={["#8851c1", "#a269d1", "#bc81e0", "#d598f0", "#efb0ff"]}
+        colors={Colors}
       >
         <ScrollView>
           <View style={styles.imageContainer}>
