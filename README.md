@@ -76,6 +76,13 @@ Welcome to the "Quiz" built with Expo! This README will guide you through settin
 - Log in with the next credentials
   - User: admin
   - Password: 12345678
+ 
+### Usage
+
+-Log in session
+
+![alt text](https://github.com/[username]/[reponame]/blob/[branch]/image.jpg?raw=true)
+
 
 ### Contributing:
 
