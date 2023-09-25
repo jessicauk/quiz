@@ -71,6 +71,12 @@ Welcome to the "Quiz" built with Expo! This README will guide you through settin
 - If you run into issues with starting the app, you might want to try clearing the cache with `expo start -c`.
 - If you plan to use any native modules, you'll need to eject from Expo and use bare React Native. However, be sure about this decision as it's not easily reversible.
 
+### Log in session:
+
+- Log in with the next credentials
+  - User: admin
+  - Password: 12345678
+
 ### Contributing:
 
 If you would like to contribute to this project, please make sure to branch off of master, make your changes, and then submit a pull request.
