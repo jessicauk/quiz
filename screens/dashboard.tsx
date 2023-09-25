@@ -11,7 +11,6 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { DashboardScreenNavigationProp } from "../types/stack-navigator";
-import Logout from "../components/logout";
 import { Colors } from "../const";
 
 export default function Dashboard() {
@@ -22,7 +21,7 @@ export default function Dashboard() {
       <LinearGradient style={styles.gradient} colors={Colors}>
         <ScrollView>
           <View>
-            <Text style={styles.title}>Welcome to Quizz App!</Text>
+            <Text style={styles.title}>Welcome to Quiz App!</Text>
           </View>
           <View
             style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
@@ -44,7 +43,6 @@ export default function Dashboard() {
             </View>
           </View>
         </ScrollView>
-        <Logout />
       </LinearGradient>
     </SafeAreaView>
   );
