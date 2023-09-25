@@ -4,7 +4,7 @@ import { Question } from "./interfaces";
 interface LoginState {
   current: Question | null;
   questions: Question[];
-  setCurrent: (question: Question) => void;
+  setCurrent: (question: Question | null) => void;
 }
 
 export const useQuestionStore = create<LoginState>()((set) => ({

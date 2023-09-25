@@ -1,4 +1,5 @@
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import type { RouteProp } from '@react-navigation/native';
 import { Answer } from "../stores/interfaces";
 
 export type StackNavigation = {
@@ -25,3 +26,11 @@ export type QuizScreenNavigationProp = NativeStackNavigationProp<
   StackNavigation,
   "Quiz"
 >;
+
+export type ScoreScreenNavigationProp = NativeStackNavigationProp<
+  StackNavigation,
+  "Score"
+>;
+
+export type ScoreScreenRouteProp = RouteProp<StackNavigation, 'Score'>;
+

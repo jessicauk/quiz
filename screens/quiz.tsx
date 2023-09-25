@@ -21,6 +21,7 @@ import { QuizScreenNavigationProp } from "../types/stack-navigator";
 export default function Dashboard() {
   const [options, setOptions] = useState<string[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
+  // points
   const [points, setPoints] = useState(0);
   // index of the question
   const [index, setIndex] = useState(0);
@@ -36,25 +37,23 @@ export default function Dashboard() {
 
   const progressPercentage = Math.floor((index / totalQuestions) * 100);
 
+  const { setCurrent, current } = useQuestionStore();
+
   const handleQuestion = (index: number = 0, data: Data) => {
-    setCurrent(data?.results[index]);
-    const opt = [
-      data?.results[index].correct_answer,
-      ...data?.results[index].incorrect_answers,
-    ];
-    setOptions(shuffled(opt));
+    if (data?.results[index]) setCurrent(data?.results[index]);
   };
 
-  const { setCurrent, current } = useQuestionStore();
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ["quiz"],
     queryFn: getQuiz,
     onSuccess(data) {
-      handleQuestion(index, data);
-      setTotalQuestions(data?.results?.length);
+      if (data) {
+        handleQuestion(index, data);
+        setTotalQuestions(data?.results?.length);
+      }
     },
-    refetchOnWindowFocus: false,
     enabled: true,
+    refetchOnWindowFocus: false,
   });
 
   const onPress = (option: string, index: number) => {
@@ -62,33 +61,30 @@ export default function Dashboard() {
     setSelected(option);
   };
 
-  const onClickNext = () => {
-    setIndex((index) => index + 1);
-    if (index + 1 <= totalQuestions) handleQuestion(index, data);
-  };
-
-  const clear = () => {
-    setAnswerStatus(null);
-    setSelectedAnswerIndex(null);
-    setSelected(null);
-  };
-
   useEffect(() => {
-    if (selected !== null) {
+    if (selected !== null && selectedAnswerIndex !== null) {
       const answersArray = [...answers];
-      
       if (selected === current?.correct_answer) {
         setPoints((points) => points + 1);
         answersArray.push({ question: index + 1, answer: true });
         setAnswerStatus(true);
       } else {
-        answersArray.push({ question: index + 1, answer: false });
         setAnswerStatus(false);
+        answersArray.push({ question: index + 1, answer: false });
       }
       setAnswers(answersArray);
-
     }
   }, [selected]);
+
+  const onClickNext = () => {
+    setIndex((index) => index + 1);
+  };
+
+  useEffect(() => {
+    setSelected(null);
+    setSelectedAnswerIndex(null);
+    setAnswerStatus(null);
+  }, [index]);
 
   useEffect(() => {
     if (index + 1 > totalQuestions && selected) {
@@ -96,26 +92,51 @@ export default function Dashboard() {
         answers: answers,
         points: points,
       });
+    } else {
+      handleQuestion(index, data);
     }
   }, [index, totalQuestions, selected]);
 
   useEffect(() => {
-    clear();
-  }, [index]);
+    if (current) {
+      const opt = [current.correct_answer, ...current.incorrect_answers];
+      setOptions(shuffled(opt));
+    } else setOptions([]);
+  }, [current]);
 
   useEffect(() => {
-    setIndex(0);
     return () => {
+      setCurrent(null);
+      /* TO DO:
+      setCurrent(null);
+      setOptions([]);
+      setTotalQuestions(0);
       setIndex(0);
+      setAnswers([]);
+      setPoints(0); */
     };
   }, []);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      setCurrent(null);
+      setOptions([]);
+      setTotalQuestions(0);
+      setIndex(0);
+      setAnswers([]);
+      setPoints(0);
+      refetch();
+    });
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation]);
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View>
           {isLoading ? (
-            <View>
+            <View style={styles.skeleton}>
               <Skeleton animation="wave" width={"100%"} height={40} />
               <Skeleton animation="wave" width={"100%"} height={40} />
               <Skeleton animation="wave" width={"100%"} height={40} />
@@ -156,14 +177,13 @@ export default function Dashboard() {
 
               <View style={styles.questionContainer}>
                 <Text style={styles.question}>{quotes(current?.question)}</Text>
-                <View style={{ backgroundColor: "#efb0ff" }}>
+                <View>
                   {options?.map((item, indx) => (
                     <Pressable
                       key={item}
                       onPress={() => selected === null && onPress(item, indx)}
-                      style={{ backgroundColor: "#efb0ff" }}
                     >
-                      <ListItem style={styles.item}>
+                      <ListItem containerStyle={styles.item}>
                         <ListItem.Content
                           style={
                             selected === current?.correct_answer &&
@@ -207,7 +227,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#efb0ff",
-    paddingHorizontal: 10,
+  },
+  quiz: {
+    flex: 1,
+    alignContent: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 20,
+    paddingHorizontal: 5,
+  },
+  skeleton: {
+    flex: 1,
+    justifyContent: "center",
+    flexDirection: "row",
   },
   progress: {
     display: "flex",
@@ -216,6 +248,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 20,
     marginTop: 20,
+    width: "100%",
   },
   questionContainer: {
     marginTop: 10,
