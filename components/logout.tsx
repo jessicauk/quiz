@@ -1,10 +1,27 @@
 import React from "react";
 import { Button, Icon } from "@rneui/themed";
 import { View, StyleSheet } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
+
+import { useAuth } from "../context/authentication-context";
+import { ScoreScreenNavigationProp } from "../types/stack-navigator";
 
 export const Logout: React.FunctionComponent<{}> = () => {
+  const { setUser } = useAuth();
+  const navigation = useNavigation<ScoreScreenNavigationProp>();
+
+  const logout = async () => {
+    try {
+      await AsyncStorage.removeItem("user");
+      setUser(null);
+      navigation.navigate("Login")
+    } catch (error) {
+      console.error("Error logging out", error);
+    }
+  };
   const onLogout = () => {
-    alert("Logout");
+    logout();
   };
 
   return (

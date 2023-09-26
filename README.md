@@ -43,7 +43,7 @@ Welcome to the "Quiz" built with Expo! This README will guide you through settin
 
     - Using yarn:
       ```bash
-      yarn
+      yarn install
       ```
 
 ### Running the App:
