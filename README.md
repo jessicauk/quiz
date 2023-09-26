@@ -86,14 +86,21 @@ Welcome to the "Quiz" built with Expo! This README will guide you through settin
 ![Login](https://github.com/jessicauk/quiz/blob/main/assets/login.png?raw=true)
 
   ```
-    User: admin
-    Password: 12345678
+  User: admin
+  Password: 12345678
   ```
 
 - Press on **START QUIZ** button
 
 ![Login](https://github.com/jessicauk/quiz/blob/main/assets/dashboard.png?raw=true)
 
+- Select the correct answer as possible
+
+![Quiz 1](https://github.com/jessicauk/quiz/blob/main/assets/quiz-1.png?raw=true)
+
+![Quiz 2](https://github.com/jessicauk/quiz/blob/main/assets/quiz-2.png?raw=true)
+
+![Quiz 3](https://github.com/jessicauk/quiz/blob/main/assets/quiz-3.png?raw=true)
 
 ### Contributing:
 
