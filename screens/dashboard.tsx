@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: "700",
     textAlign: "center",
-    color: "#FFF",
+    color: "#fff",
     marginVertical: 100,
   },
   image: {
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   text: {
-    color: "#FFF",
+    color: "#fff",
     fontWeight: "600",
     textAlign: "center",
   },

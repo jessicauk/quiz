@@ -92,7 +92,7 @@ Welcome to the "Quiz" built with Expo! This README will guide you through settin
 
 - Press on **START QUIZ** button
 
-![Login](https://github.com/jessicauk/quiz/blob/main/assets/dashboard.png?raw=true)
+![Dashboard](https://github.com/jessicauk/quiz/blob/main/assets/dashboard.png?raw=true)
 
 - Select the correct answer as possible
 
@@ -101,6 +101,11 @@ Welcome to the "Quiz" built with Expo! This README will guide you through settin
 ![Quiz 2](https://github.com/jessicauk/quiz/blob/main/assets/quiz-2.png?raw=true)
 
 ![Quiz 3](https://github.com/jessicauk/quiz/blob/main/assets/quiz-3.png?raw=true)
+
+- Once the quiz is completed next screen shows your total score
+
+![Score](https://github.com/jessicauk/quiz/blob/main/assets/score.png?raw=true)
+
 
 ### Contributing:
 
