@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Pressable,
 } from "react-native";
-import { Text } from "@rneui/themed";
+import { Chip, Text } from "@rneui/themed";
 import { useQuery } from "@tanstack/react-query";
 import { Skeleton, ListItem } from "@rneui/base";
 import { useNavigation } from "@react-navigation/native";
@@ -17,6 +17,8 @@ import { useQuestionStore } from "../stores/question";
 import { shuffled, quotes } from "../utils";
 import { Answer, Data } from "../stores/interfaces";
 import { QuizScreenNavigationProp } from "../types/stack-navigator";
+import { Colors } from "../const";
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function Dashboard() {
   const [options, setOptions] = useState<string[]>([]);
@@ -107,13 +109,6 @@ export default function Dashboard() {
   useEffect(() => {
     return () => {
       setCurrent(null);
-      /* TO DO:
-      setCurrent(null);
-      setOptions([]);
-      setTotalQuestions(0);
-      setIndex(0);
-      setAnswers([]);
-      setPoints(0); */
     };
   }, []);
 
@@ -133,92 +128,111 @@ export default function Dashboard() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <View>
-          {isLoading ? (
-            <View style={styles.skeleton}>
-              <Skeleton animation="wave" width={"100%"} height={40} />
-              <Skeleton animation="wave" width={"100%"} height={40} />
-              <Skeleton animation="wave" width={"100%"} height={40} />
-            </View>
-          ) : (
-            <View>
-              <View style={styles.progress}>
-                <Text>Your Progress</Text>
-                <Text>{`${index} / ${totalQuestions} questions answered`}</Text>
+      <LinearGradient style={styles.gradient} colors={Colors}>
+        <ScrollView>
+          <View>
+            {isLoading ? (
+              <View style={styles.skeleton}>
+                <Skeleton animation="wave" width={"100%"} height={40} />
+                <Skeleton animation="wave" width={"100%"} height={40} />
+                <Skeleton animation="wave" width={"100%"} height={40} />
               </View>
-              {/* Progress Bar */}
-              <View
-                style={{
-                  backgroundColor: "#fff",
-                  width: "100%",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  height: 10,
-                  borderRadius: 20,
-                  justifyContent: "center",
-                  marginTop: 20,
-                  marginLeft: 10,
-                }}
-              >
-                <Text
-                  style={{
-                    backgroundColor: "#a269d1",
-                    borderRadius: 12,
-                    position: "absolute",
-                    left: 0,
-                    height: 10,
-                    right: 0,
-                    width: `${progressPercentage}%`,
-                    marginTop: 20,
-                  }}
-                />
-              </View>
+            ) : (
+              <View style={styles.wrap}>
+                <View style={styles.progressText}>
+                  <Text style={{ fontSize: 15 }}>Your Progress</Text>
+                  <Text
+                    style={{ fontSize: 20, color: "#fff" }}
+                  >{`${index} / ${totalQuestions}`}</Text>
+                  <Text style={{ fontSize: 15 }}>{`questions answered`}</Text>
+                </View>
+                {/* Progress Bar */}
+                <View style={styles.progressBar}>
+                  <Text
+                    style={{
+                      backgroundColor: "#efb0ff",
+                      borderRadius: 12,
+                      position: "absolute",
+                      left: 0,
+                      height: 10,
+                      right: 0,
+                      width: `${progressPercentage}%`,
+                      marginTop: 20,
+                    }}
+                  />
+                </View>
 
-              <View style={styles.questionContainer}>
-                <Text style={styles.question}>{quotes(current?.question)}</Text>
-                <View>
-                  {options?.map((item, indx) => (
-                    <Pressable
-                      key={item}
-                      onPress={() => selected === null && onPress(item, indx)}
-                    >
-                      <ListItem containerStyle={styles.item}>
-                        <ListItem.Content
-                          style={
-                            selected === current?.correct_answer &&
-                            indx === selectedAnswerIndex
-                              ? styles.correct
-                              : selected !== null &&
-                                indx === selectedAnswerIndex
-                              ? styles.wrong
-                              : styles.itemContent
-                          }
-                        >
-                          <View>
-                            <Text style={styles.number}>{indx + 1}</Text>
-                          </View>
-                          <ListItem.Title>{quotes(item)}</ListItem.Title>
-                        </ListItem.Content>
-                      </ListItem>
-                    </Pressable>
-                  ))}
+                <View style={styles.chipContainer}>
+                  <Chip
+                    title={current?.category}
+                    containerStyle={{ marginVertical: 15 }}
+                  />
+                  <Chip
+                    title={current?.difficulty}
+                    containerStyle={{ marginVertical: 15 }}
+                  />
                 </View>
-              </View>
-              {answerStatus !== null && (
-                <View style={styles.next}>
-                  <Text style={styles.label}>
-                    {answerStatus ? "Answer Correct" : "Answer Wrong"}
+
+                <View style={styles.questionContainer}>
+                  <Text style={styles.question}>
+                    {quotes(current?.question)}
                   </Text>
-                  <TouchableOpacity onPress={onClickNext} style={styles.button}>
-                    <Text>{index + 1 < totalQuestions ? "Next" : "Done"}</Text>
-                  </TouchableOpacity>
+                  <View>
+                    {options?.map((item, indx) => (
+                      <Pressable
+                        key={item}
+                        onPress={() => selected === null && onPress(item, indx)}
+                      >
+                        <ListItem containerStyle={styles.item}>
+                          <ListItem.Content
+                            style={
+                              selected === current?.correct_answer &&
+                              indx === selectedAnswerIndex
+                                ? styles.correct
+                                : selected !== null &&
+                                  indx === selectedAnswerIndex
+                                ? styles.wrong
+                                : styles.itemContent
+                            }
+                          >
+                            <View>
+                              <Text style={styles.number}>{indx + 1}</Text>
+                            </View>
+                            <ListItem.Title style={{ width: "auto" }}>
+                              {quotes(item)}
+                            </ListItem.Title>
+                          </ListItem.Content>
+                        </ListItem>
+                      </Pressable>
+                    ))}
+                  </View>
                 </View>
-              )}
-            </View>
-          )}
-        </View>
-      </ScrollView>
+                {answerStatus !== null && (
+                  <View style={styles.next}>
+                    <Text style={styles.label}>
+                      {answerStatus ? '"Answer Correct"' : '"Answer Wrong"'}
+                    </Text>
+                    <TouchableOpacity
+                      onPress={onClickNext}
+                      style={styles.button}
+                    >
+                      <Text
+                        style={{
+                          color: "#fff",
+                          fontSize: 15,
+                          fontWeight: "700",
+                        }}
+                      >
+                        {index + 1 < totalQuestions ? "Next" : "Done"}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+              </View>
+            )}
+          </View>
+        </ScrollView>
+      </LinearGradient>
     </SafeAreaView>
   );
 }
@@ -226,7 +240,16 @@ export default function Dashboard() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#efb0ff",
+  },
+  wrap: {
+    flex: 1,
+    paddingHorizontal: 10,
+  },
+  gradient: {
+    height: "100%",
+    flex: 1,
+    justifyContent: "center",
+    alignContent: "center",
   },
   quiz: {
     flex: 1,
@@ -241,14 +264,33 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flexDirection: "row",
   },
-  progress: {
+  progressBar: {
+    backgroundColor: "#fff",
+    width: "auto",
+    flexDirection: "row",
+    alignItems: "center",
+    height: 10,
+    borderRadius: 20,
+    justifyContent: "center",
+    marginTop: 20,
+    paddingVertical: 10,
+  },
+  progressText: {
     display: "flex",
     justifyContent: "space-between",
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 20,
-    marginTop: 20,
+    marginBottom: 5,
+    marginTop: 5,
     width: "100%",
+  },
+  chipContainer: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    flexWrap: "wrap",
+    alignItems: "center",
+    alignContent: "center",
   },
   questionContainer: {
     marginTop: 10,
@@ -261,15 +303,13 @@ const styles = StyleSheet.create({
   item: {
     borderRadius: 20,
     height: "auto",
-    backgroundColor: "#efb0ff!important",
+    backgroundColor: "transparent",
   },
   option: {
     marginVertical: 12,
     borderWidth: 1,
-    borderColor: "#efb0ff",
+    borderColor: "blue",
     borderRadius: 20,
-    // height: "auto",
-    backgroundColor: "#efb0ff!important",
   },
   itemContent: {
     flex: 1,
@@ -280,6 +320,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#bc81e0",
     borderRadius: 20,
     padding: 8,
+    borderWidth: 1,
+    borderColor: Colors[0],
   },
   correct: {
     flex: 1,

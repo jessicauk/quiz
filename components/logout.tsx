@@ -1,53 +1,37 @@
-import React, { useState } from "react";
-import { Button, Overlay, Icon } from "@rneui/themed";
-import { View, Text, StyleSheet } from "react-native";
+import React from "react";
+import { Button, Icon } from "@rneui/themed";
+import { View, StyleSheet } from "react-native";
 
 export const Logout: React.FunctionComponent<{}> = () => {
-  const [visible, setVisible] = useState(false);
-
-  const toggleOverlay = () => {
-    setVisible(!visible);
+  const onLogout = () => {
+    alert("Logout");
   };
 
   return (
     <View
       style={{
         flex: 1,
-        flexShrink: 10,
         flexDirection: "row",
+        flexWrap: "nowrap",
         justifyContent: "flex-end",
-        alignContent: "flex-end",
-        alignSelf: "flex-end",
+        alignContent: "center",
+        alignItems: "center",
+        width: "100%",
       }}
     >
       <Button
         title="Log out"
         icon={
-            <Icon
-              name="logout"
-              color="white"
-              size={25}
-              iconStyle={{ marginRight: 10 }}
-            />
-          }
-        onPress={toggleOverlay}
+          <Icon
+            name="logout"
+            color="white"
+            size={25}
+            iconStyle={{ marginRight: 10 }}
+          />
+        }
+        onPress={onLogout}
         buttonStyle={styles.button}
       />
-      <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
-        <Text style={styles.textPrimary}>Thanks for playing!</Text>
-        <Button
-          icon={
-            <Icon
-              name="logout"
-              color="white"
-              size={25}
-              iconStyle={{ marginRight: 10 }}
-            />
-          }
-          title="Start Building"
-          onPress={toggleOverlay}
-        />
-      </Overlay>
     </View>
   );
 };
@@ -55,11 +39,10 @@ export const Logout: React.FunctionComponent<{}> = () => {
 const styles = StyleSheet.create({
   button: {
     borderRadius: 50,
-    paddingHorizontal: 10,
-    paddingVertical: 10,
     padding: 10,
     backgroundColor: "#8851c1",
-    margin: 10,
+    marginTop: 10,
+    marginBottom: 10,
   },
   textPrimary: {
     marginVertical: 20,
