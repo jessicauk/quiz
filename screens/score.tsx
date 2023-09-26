@@ -7,14 +7,17 @@ import {
   Text,
   Pressable,
 } from "react-native";
+import { useQueryClient } from "@tanstack/react-query";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Icon, ListItem } from "@rneui/base";
+import { LinearGradient } from "expo-linear-gradient";
+
 import { Answer } from "../stores/interfaces";
 import {
   ScoreScreenRouteProp,
   ScoreScreenNavigationProp,
 } from "../types/stack-navigator";
-import { useQueryClient } from "@tanstack/react-query";
+import { Colors } from "../const";
 
 export default function Score() {
   const { params } = useRoute<ScoreScreenRouteProp>();
@@ -32,50 +35,95 @@ export default function Score() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <View style={styles.header}>
-          <View>
-            <Text style={styles.title}>Your Results</Text>
+      <LinearGradient style={styles.gradient} colors={Colors}>
+        <ScrollView>
+          <View style={styles.header}>
+            <View>
+              <Text style={styles.title}>Your Result</Text>
+            </View>
+            <View>
+              <Text style={styles.subtitle}>Questions Answered</Text>
+            </View>
           </View>
-          <View>
-            <Text style={styles.subtitle}>Questions Answered</Text>
+          <View
+            style={{
+              flex: 1,
+              flexDirection: "row",
+              flexWrap: "wrap",
+            }}
+          >
+            <View style={{ width: "50%", height: "100%" }}>
+              {answers?.slice(0, answers.length / 2).map((item: Answer) => (
+                <ListItem
+                  key={item.question}
+                  containerStyle={{
+                    backgroundColor: "transparent",
+                  }}
+                >
+                  <ListItem.Content style={styles.content}>
+                    <View>
+                      <Text>{item.question}</Text>
+                    </View>
+                    <ListItem.Title>
+                      <Icon
+                        type="material-ui"
+                        style={{
+                          backgroundColor: "#fff",
+                          borderRadius: 15,
+                        }}
+                        color={item.answer ? "#0bad51" : "#fc325b"}
+                        name={item.answer ? "check-circle" : "cancel"}
+                      />
+                    </ListItem.Title>
+                  </ListItem.Content>
+                </ListItem>
+              ))}
+            </View>
+            <View style={{ width: "50%" }}>
+              {answers
+                ?.slice(answers.length / 2, answers.length)
+                .map((item: Answer) => (
+                  <ListItem
+                    key={item.question}
+                    containerStyle={{
+                      backgroundColor: "transparent",
+                    }}
+                  >
+                    <ListItem.Content style={styles.content}>
+                      <View>
+                        <Text>{item.question}</Text>
+                      </View>
+                      <ListItem.Title>
+                        <Icon
+                          type="material-ui"
+                          style={{
+                            backgroundColor: "#fff",
+                            borderRadius: 15,
+                          }}
+                          color={item.answer ? "#0bad51" : "#fc325b"}
+                          name={item.answer ? "check-circle" : "cancel"}
+                        />
+                      </ListItem.Title>
+                    </ListItem.Content>
+                  </ListItem>
+                ))}
+            </View>
           </View>
-        </View>
-        <View>
-          {answers?.map((item: Answer) => (
-            <ListItem
-              key={item.question}
-              containerStyle={{ backgroundColor: "red" }}
-            >
-              <ListItem.Content style={styles.content}>
-                <View>
-                  <Text>{item.question}</Text>
-                </View>
-                <ListItem.Title>
-                  <Icon
-                    style={styles.icon}
-                    name={item.answer ? "check-circle" : "cancel"}
-                  />
-                  {item.answer ? "Correct" : "Wrong"}
-                </ListItem.Title>
-              </ListItem.Content>
-            </ListItem>
-          ))}
-        </View>
-        <View style={styles.footer}>
-          <View>
-            <Text style={styles.title}>Points</Text>
+          <View style={styles.footer}>
+            <View>
+              <Text style={styles.title}>Points</Text>
+            </View>
+            <View>
+              <Text style={styles.numberPoints}>{points}</Text>
+            </View>
           </View>
-          <View>
-            <Text style={styles.subtitle}>{points}</Text>
+          <View style={styles.buttonContainer}>
+            <Pressable style={styles.button} onPress={onPress}>
+              <Text style={styles.text}>PLAY AGAIN</Text>
+            </Pressable>
           </View>
-        </View>
-        <View style={styles.buttonContainer}>
-          <Pressable style={styles.button} onPress={onPress}>
-            <Text style={styles.text}>PLAY AGAIN</Text>
-          </Pressable>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </LinearGradient>
     </SafeAreaView>
   );
 }
@@ -83,10 +131,14 @@ export default function Score() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#efb0ff",
-    paddingHorizontal: 10,
+    alignContent: "center",
+  },
+  gradient: {
+    height: "100%",
+    flex: 1,
     justifyContent: "center",
     alignContent: "center",
+    alignItems: "center",
   },
   header: {
     flex: 1,
@@ -108,14 +160,12 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-evenly",
     alignContent: "center",
     alignItems: "center",
   },
-  icon: { color: "#fff", verticalAlign: "middle" },
   footer: {
     flex: 1,
-    backgroundColor: "#efb0ff",
     paddingHorizontal: 10,
     justifyContent: "center",
     alignContent: "center",
@@ -134,7 +184,15 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   text: {
-    color: "#FFF",
+    color: "#fff",
     fontWeight: "600",
+    textAlign: "center",
+  },
+  numberPoints: {
+    fontWeight: "400",
+    fontSize: 50,
+    fontStyle: "normal",
+    color: "#fff",
+    marginBottom: 10,
   },
 });

@@ -1,4 +1,5 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
+import { Icon } from "@rneui/themed";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import Login from "./screens/login";
@@ -16,32 +17,80 @@ export default function StackNavigator() {
     <QueryClientProvider client={queryClient}>
       <Stack.Navigator
         initialRouteName="Login"
-        screenOptions={{
+        screenOptions={({ navigation }) => ({
           headerRight: () => <Logout />,
+          /* headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Icon
+                name="arrow-back"
+                color="white"
+                size={25}
+                iconStyle={{ marginRight: 10 }}
+              />
+            </TouchableOpacity>
+          ), */
           headerStyle: styles.headerStyle,
           headerTintColor: "#fff",
           headerTitleStyle: styles.headerTitleStyle,
-        }}
+        })}
       >
         <Stack.Screen
           name="Login"
           component={Login}
-          options={{ headerShown: false }}
+          options={{
+            headerShown: false,
+          }}
         />
         <Stack.Screen
           name="Dashboard"
           component={Dashboard}
-          options={{ title: "Dashboard" }}
+          options={{
+            title: "Dashboard",
+            headerLeft: () => (
+              <TouchableOpacity>
+                <Icon
+                  name="arrow-back"
+                  color="white"
+                  size={25}
+                  iconStyle={{ marginRight: 10 }}
+                />
+              </TouchableOpacity>
+            ),
+          }}
         />
         <Stack.Screen
           name="Quiz"
           component={Quiz}
-          options={{ title: "Quiz" }}
+          options={({ navigation }) => ({
+            title: "Quiz",
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Icon
+                  name="arrow-back"
+                  color="white"
+                  size={25}
+                  iconStyle={{ marginRight: 10 }}
+                />
+              </TouchableOpacity>
+            ),
+          })}
         />
         <Stack.Screen
           name="Score"
           component={Score}
-          options={{ title: "Score" }}
+          options={({ navigation }) => ({
+            title: "Score",
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Icon
+                  name="arrow-back"
+                  color="white"
+                  size={25}
+                  iconStyle={{ marginRight: 10 }}
+                />
+              </TouchableOpacity>
+            ),
+          })}
         />
       </Stack.Navigator>
     </QueryClientProvider>

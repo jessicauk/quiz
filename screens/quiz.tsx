@@ -11,6 +11,7 @@ import { Chip, Text } from "@rneui/themed";
 import { useQuery } from "@tanstack/react-query";
 import { Skeleton, ListItem } from "@rneui/base";
 import { useNavigation } from "@react-navigation/native";
+import { LinearGradient } from "expo-linear-gradient";
 
 import { getQuiz } from "../api/api";
 import { useQuestionStore } from "../stores/question";
@@ -18,7 +19,6 @@ import { shuffled, quotes } from "../utils";
 import { Answer, Data } from "../stores/interfaces";
 import { QuizScreenNavigationProp } from "../types/stack-navigator";
 import { Colors } from "../const";
-import { LinearGradient } from "expo-linear-gradient";
 
 export default function Dashboard() {
   const [options, setOptions] = useState<string[]>([]);
