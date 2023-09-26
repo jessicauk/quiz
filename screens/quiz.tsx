@@ -108,7 +108,9 @@ export default function Dashboard() {
 
   useEffect(() => {
     return () => {
+      setAnswers([]);
       setCurrent(null);
+      setPoints(0);
     };
   }, []);
 
@@ -198,7 +200,7 @@ export default function Dashboard() {
                             <View>
                               <Text style={styles.number}>{indx + 1}</Text>
                             </View>
-                            <ListItem.Title style={{ width: "auto" }}>
+                            <ListItem.Title style={{ maxWidth: 290, aspectRatio: "auto", height: "auto" }}>
                               {quotes(item)}
                             </ListItem.Title>
                           </ListItem.Content>
@@ -210,7 +212,9 @@ export default function Dashboard() {
                 {answerStatus !== null && (
                   <View style={styles.next}>
                     <Text style={styles.label}>
-                      {answerStatus ? '"Answer Correct"' : '"Answer Wrong"'}
+                      {answerStatus
+                        ? ""
+                        : `Answer: "${quotes(current?.correct_answer)}"`}
                     </Text>
                     <TouchableOpacity
                       onPress={onClickNext}
@@ -360,7 +364,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "center",
     flexDirection: "column",
-    marginVertical: 30,
+    marginVertical: 10,
   },
   label: {
     fontWeight: "400",

@@ -19,7 +19,7 @@ export default function StackNavigator() {
         initialRouteName="Login"
         screenOptions={({ navigation }) => ({
           headerRight: () => <Logout />,
-          /* headerLeft: () => (
+          headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.goBack()}>
               <Icon
                 name="arrow-back"
@@ -28,7 +28,7 @@ export default function StackNavigator() {
                 iconStyle={{ marginRight: 10 }}
               />
             </TouchableOpacity>
-          ), */
+          ),
           headerStyle: styles.headerStyle,
           headerTintColor: "#fff",
           headerTitleStyle: styles.headerTitleStyle,
@@ -46,51 +46,21 @@ export default function StackNavigator() {
           component={Dashboard}
           options={{
             title: "Dashboard",
-            headerLeft: () => (
-              <TouchableOpacity>
-                <Icon
-                  name="arrow-back"
-                  color="white"
-                  size={25}
-                  iconStyle={{ marginRight: 10 }}
-                />
-              </TouchableOpacity>
-            ),
           }}
         />
         <Stack.Screen
           name="Quiz"
           component={Quiz}
-          options={({ navigation }) => ({
+          options={{
             title: "Quiz",
-            headerLeft: () => (
-              <TouchableOpacity onPress={() => navigation.goBack()}>
-                <Icon
-                  name="arrow-back"
-                  color="white"
-                  size={25}
-                  iconStyle={{ marginRight: 10 }}
-                />
-              </TouchableOpacity>
-            ),
-          })}
+          }}
         />
         <Stack.Screen
           name="Score"
           component={Score}
-          options={({ navigation }) => ({
+          options={{
             title: "Score",
-            headerLeft: () => (
-              <TouchableOpacity onPress={() => navigation.goBack()}>
-                <Icon
-                  name="arrow-back"
-                  color="white"
-                  size={25}
-                  iconStyle={{ marginRight: 10 }}
-                />
-              </TouchableOpacity>
-            ),
-          })}
+          }}
         />
       </Stack.Navigator>
     </QueryClientProvider>

@@ -15,29 +15,28 @@ import { LoginScreenNavigationProp } from "../types/stack-navigator";
 import { useLoginStore } from "../stores/login";
 import { LinearGradient } from "expo-linear-gradient";
 import { Colors } from "../const";
+import { useAuth } from "../context/authentication-context";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation<LoginScreenNavigationProp>();
-  const { defaultUser, setIsLoggedIn } = useLoginStore();
+  const { defaultUser } = useLoginStore();
+  const { setUser } = useAuth();
 
   const onLogin = () => {
     if (
       password === defaultUser?.password &&
       username === defaultUser?.username
     ) {
-      setIsLoggedIn();
-      navigation.navigate("Dashboard");
+      setUser({ password, username })
+      navigation.navigate("Dashboard") 
     }
   };
-
+  
   return (
     <SafeAreaView style={styles.container}>
-      <LinearGradient
-        style={styles.gradient}
-        colors={Colors}
-      >
+      <LinearGradient style={styles.gradient} colors={Colors}>
         <ScrollView>
           <View style={styles.imageContainer}>
             <View>
